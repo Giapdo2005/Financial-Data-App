@@ -1,4 +1,4 @@
-export function Filter() {
+export function Filter({ handleFilter }) {
   return (
     <div className="space-y-6">
       <div className="flex flex-col space-y-2">
@@ -9,6 +9,7 @@ export function Filter() {
           id="dateRange"
           className="p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
+          <option value="1w">All</option>
           <option value="1w">2024</option>
           <option value="1m">2023</option>
           <option value="3m">2022</option>
@@ -24,6 +25,7 @@ export function Filter() {
           id="revenue"
           className="p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
+          <option value="1w">All</option>
           <option value="asc">$0-1,000,000,000.00</option>
           <option value="desc">$1,000,000,001.00-2,000,000,000.00</option>
           <option value="desc">$2,000,000,001.00-3,000,000,000.00</option>
@@ -39,6 +41,7 @@ export function Filter() {
           id="netIncome"
           className="p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
+          <option value="1w">All</option>
           <option value="desc">$5,000,000,001.00-7,000,000,000.00</option>
           <option value="desc">$7,000,000,001.00-9,000,000,000.00</option>
           <option value="desc">$9,000,000,001.00-11,000,000,000.00</option>
@@ -73,6 +76,9 @@ export function Filter() {
             <option>Descending</option>
           </select>
         </div>
+        <button className="flex items-center bg-gray-800 text-white text-xl mt-5 font-bold px-6 py-2 rounded hover:bg-gray-600">
+          Sort
+        </button>
       </div>
     </div>
   );
