@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Table } from "./Table";
 import { Filter } from "./Filter";
-export function Fetch({ data, getData, handleFilter }) {
+export function Fetch({ data, getData, handleFilter, filterData }) {
   return (
     <div className="flex justify-center mt-10">
       <div>
@@ -13,7 +13,11 @@ export function Fetch({ data, getData, handleFilter }) {
         </button>
         <div>
           {data.length > 0 && <Filter handleFilter={handleFilter} />}
-          {data.length > 0 && <Table data={data} />}
+          {data.length > 0 && filterData.length <= 0 ? (
+            <Table data={data} />
+          ) : (
+            <Table data={filterData} />
+          )}
         </div>
       </div>
     </div>
