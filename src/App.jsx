@@ -30,19 +30,12 @@ function App() {
     console.log("clicked");
 
     const form = e.target;
-    const dateRange = form.dateRange.value;
     const revenue = form.revenue.value;
     const netIncome = form.netIncome.value;
 
-    if (dateRange === "All" && revenue === "All" && netIncome === "All") {
-      setFilter([]);
-      setIsFiltered(false);
-      return;
-    }
-
     setIsFiltered(true);
 
-    console.log({ dateRange, revenue, netIncome });
+    console.log({ revenue, netIncome });
 
     let revenueStart = 0;
     let revenueEnd = Infinity;
@@ -56,26 +49,27 @@ function App() {
       [incomeStart, incomeEnd] = netIncome.slice(1, -1).split(",").map(Number);
     }
 
+    const startYear = Number(form.startYear.value);
+    const endYear = Number(form.endYear.value);
+
     // filter all the data based on the user's requirement
     const filterData = data.filter((d) => {
       let dateMatch = true;
-      if (dateRange !== "All") {
-        const year = d.date.slice(0, 4);
-        dateMatch = year === dateRange;
-      }
+
+      const year = Number(d.date.slice(0, 4));
+      dateMatch = year >= startYear && year <= endYear;
 
       return (
         dateMatch &&
-        d.revenue >= revenueStart &&
-        d.revenue <= revenueEnd &&
-        d.netIncome >= incomeStart &&
-        d.netIncome <= incomeEnd
+        (revenue === "All" ||
+          (d.revenue >= revenueStart && d.revenue <= revenueEnd)) &&
+        (netIncome === "All" ||
+          (d.netIncome >= incomeStart && d.netIncome <= incomeEnd))
       );
     });
 
     console.log(filterData);
     setFilter(filterData);
-    //3,910,350,000.00
   }
 
   return (

@@ -1,4 +1,20 @@
+import { useState, useEffect } from "react";
+
 export function Filter({ handleFilter }) {
+  const [startYear, setStartYear] = useState(2020);
+  const [endYear, setEndYear] = useState(2024);
+  const [endYearOptions, setEndYearOptions] = useState([]);
+  const [revenue, setRevenue] = useState("All");
+  const [netIncome, setNetIncome] = useState("All");
+
+  useEffect(() => {
+    const years = Array.from(
+      { length: 2025 - startYear },
+      (_, i) => startYear + i
+    );
+    setEndYearOptions(years);
+  }, [startYear]);
+
   return (
     <>
       <form onSubmit={handleFilter} className="space-y-6">
@@ -6,17 +22,39 @@ export function Filter({ handleFilter }) {
           <label htmlFor="dateRange" className="font-semibold text-lg">
             Date Range
           </label>
-          <select
-            id="dateRange"
-            className="p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="All">All</option>
-            <option value="2024">2024</option>
-            <option value="2023">2023</option>
-            <option value="2022">2022</option>
-            <option value="2021">2021</option>
-            <option value="2020">2020</option>
-          </select>
+          <div className="flex space-x-4">
+            <div className="flex flex-col">
+              <label className="font-semibold text-lg">Start Year</label>
+              <select
+                id="startYear"
+                className="p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={startYear}
+                onChange={(e) => setStartYear(Number(e.target.value))}
+              >
+                {[2020, 2021, 2022, 2023, 2024].map((year) => (
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="flex flex-col">
+              <label className="font-semibold text-lg">End Year</label>
+              <select
+                id="endYear"
+                className="p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={endYear}
+                onChange={(e) => setEndYear(Number(e.target.value))}
+              >
+                {endYearOptions.map((year) => (
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
         </div>
 
         <div className="flex flex-col space-y-2">
@@ -26,6 +64,8 @@ export function Filter({ handleFilter }) {
           <select
             id="revenue"
             className="p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={revenue}
+            onChange={(e) => setRevenue(e.target.value)}
           >
             <option value="All">All</option>
             <option value="[0,100000000000]">$0-1,000,000,000.00</option>
@@ -48,6 +88,8 @@ export function Filter({ handleFilter }) {
           <select
             id="netIncome"
             className="p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={netIncome}
+            onChange={(e) => setNetIncome(e.target.value)}
           >
             <option value="All">All</option>
             <option value="[50000000100,70000000000]">
