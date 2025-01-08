@@ -6,6 +6,7 @@ import "./index.css";
 function App() {
   const [data, setData] = useState([]);
   const [filter, setFilter] = useState([]);
+  const [isFiltered, setIsFiltered] = useState(false);
 
   async function onGetData() {
     console.log("Button clicked, fetching data...");
@@ -18,6 +19,7 @@ function App() {
       const data = await response.json();
 
       setData(data);
+      setClick(true);
     } catch (error) {
       console.error(error.message);
     }
@@ -34,8 +36,11 @@ function App() {
 
     if (dateRange === "All" && revenue === "All" && netIncome === "All") {
       setFilter([]);
+      setIsFiltered(false);
       return;
     }
+
+    setIsFiltered(true);
 
     console.log({ dateRange, revenue, netIncome });
 
@@ -68,7 +73,9 @@ function App() {
       );
     });
 
+    console.log(filterData);
     setFilter(filterData);
+    //3,910,350,000.00
   }
 
   return (
@@ -78,7 +85,8 @@ function App() {
         data={data}
         getData={onGetData}
         handleFilter={onHandleFilter}
-        filterData={filter}
+        filter={filter}
+        isFiltered={isFiltered}
       />
     </>
   );

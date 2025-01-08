@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Table } from "./Table";
 import { Filter } from "./Filter";
-export function Fetch({ data, getData, handleFilter, filterData }) {
+export function Fetch({ data, getData, handleFilter, filter, isFiltered }) {
   return (
     <div className="flex justify-center mt-10">
       <div>
@@ -13,10 +13,10 @@ export function Fetch({ data, getData, handleFilter, filterData }) {
         </button>
         <div>
           {data.length > 0 && <Filter handleFilter={handleFilter} />}
-          {data.length > 0 && filterData.length <= 0 ? (
-            <Table data={data} />
-          ) : (
-            <Table data={filterData} />
+          {data.length > 0 && !isFiltered && <Table data={data} />}
+          {isFiltered && filter.length > 0 && <Table data={filter} />}
+          {isFiltered && filter.length === 0 && (
+            <p className="text-gray-600 text-center">No matching result</p>
           )}
         </div>
       </div>

@@ -13,22 +13,24 @@ export function Table({ data }) {
             <th className="py-2 px-4 text-left text-lg">Operating Income</th>
           </tr>
         </thead>
-        <tbody>
-          {data.map((d, index) => (
-            <tr
-              key={index}
-              className={index % 2 === 0 ? "bg-gray-200" : "bg-white"}
-            >
-              <td className="py-2 px-4">AAPL</td>
-              <td className="py-2 px-4">{d.date}</td>
-              <td className="py-2 px-4">${d.revenue}</td>
-              <td className="py-2 px-4">${d.netIncome}</td>
-              <td className="py-2 px-4">${d.grossProfit}</td>
-              <td className="py-2 px-4">{d.eps}</td>
-              <td className="py-2 px-4">${d.operatingIncome}</td>
-            </tr>
-          ))}
-        </tbody>
+        {data.length > 0 && (
+          <tbody>
+            {data.map((d, index) => (
+              <tr
+                key={index}
+                className={index % 2 === 0 ? "bg-gray-200" : "bg-white"}
+              >
+                <td className="py-2 px-4">AAPL</td>
+                <td className="py-2 px-4">{d.date}</td>
+                <td className="py-2 px-4">${d.revenue}</td>
+                <td className="py-2 px-4">${d.netIncome}</td>
+                <td className="py-2 px-4">${d.grossProfit}</td>
+                <td className="py-2 px-4">{d.eps}</td>
+                <td className="py-2 px-4">${d.operatingIncome}</td>
+              </tr>
+            ))}
+          </tbody>
+        )}
       </table>
     </div>
   );
