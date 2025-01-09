@@ -5,11 +5,9 @@ export function Fetch({
   data,
   getData,
   handleFilter,
-  filter,
-  isFiltered,
+  filterAndSort,
   handleSort,
-  sorted,
-  isSorted,
+  isFilteredOrSorted,
 }) {
   return (
     <div className="flex justify-center mt-6 px-4 sm:mt-10">
@@ -26,14 +24,13 @@ export function Fetch({
               <Filter handleFilter={handleFilter} handleSort={handleSort} />
             </div>
           )}
-          {data.length > 0 && !isFiltered && !isSorted && <Table data={data} />}
-          {isFiltered && filter.length > 0 && !isSorted && (
-            <Table data={filter} />
+          {data.length > 0 && filterAndSort.length <= 0 && (
+            <Table data={data} />
           )}
-          {isFiltered && filter.length === 0 && (
+          {filterAndSort.length > 0 && <Table data={filterAndSort} />}
+          {isFilteredOrSorted && filterAndSort.length === 0 && (
             <p className="text-gray-600 text-center">No matching result</p>
           )}
-          {isSorted && <Table data={sorted} />}
         </div>
       </div>
     </div>

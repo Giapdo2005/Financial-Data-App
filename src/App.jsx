@@ -5,10 +5,10 @@ import "./index.css";
 
 function App() {
   const [data, setData] = useState([]);
-  const [filter, setFilter] = useState([]);
-  const [isFiltered, setIsFiltered] = useState(false);
-  const [sortBy, setSortBy] = useState([]);
-  const [isSorted, setIsSorted] = useState(false);
+  const [filterAndSort, setFilterAndSort] = useState([]);
+  const [currentFilterCriteria, setCurrentFilterCriteria] = useState(null);
+  const [currentSortCriteria, setCurrentSortCriteria] = useState(null);
+  const [isFilteredOrSorted, setIsFilteredOrSorted] = useState(false);
 
   async function onGetData() {
     console.log("Button clicked, fetching data...");
@@ -34,8 +34,6 @@ function App() {
     const revenue = form.revenue.value;
     const netIncome = form.netIncome.value;
 
-    setIsFiltered(true);
-
     console.log({ revenue, netIncome });
 
     let revenueStart = 0;
@@ -53,83 +51,87 @@ function App() {
     const startYear = Number(form.startYear.value);
     const endYear = Number(form.endYear.value);
 
-    // filter all the data based on the user's requirement
-    const filterData = data.filter((d) => {
-      let dateMatch = true;
+    const filterCriteria = {
+      startYear,
+      endYear,
+      revenueStart,
+      revenueEnd,
+      incomeStart,
+      incomeEnd,
+    };
 
-      const year = Number(d.date.slice(0, 4));
-      dateMatch = year >= startYear && year <= endYear;
+    setCurrentFilterCriteria(filterCriteria);
 
-      return (
-        dateMatch &&
-        (revenue === "All" ||
-          (d.revenue >= revenueStart && d.revenue <= revenueEnd)) &&
-        (netIncome === "All" ||
-          (d.netIncome >= incomeStart && d.netIncome <= incomeEnd))
-      );
-    });
-
-    console.log(filterData);
-    setFilter(filterData);
+    applyFilterAndSort(filterCriteria, currentSortCriteria);
   }
 
   function onHandleSortBy(e) {
     e.preventDefault();
-    console.log("clicked");
 
     const form = e.target;
     const sortBy = form.sortBy.value;
     const order = form.order.value;
 
-    const dataToSort = isFiltered ? filter : data;
+    const sortCriteria = { sortBy, order };
 
-    if (sortBy === "dateRange") {
-      if (order === "ascending") {
-        const sorted = [...dataToSort].sort(
-          (a, b) => new Date(a.date) - new Date(b.date)
-        );
-        setSortBy(sorted);
-        setIsSorted(true);
-      } else {
-        const sorted = [...dataToSort].sort(
-          (a, b) => new Date(b.date) - new Date(a.date)
-        );
-        setSortBy(sorted);
-        setIsSorted(true);
-      }
+    applyFilterAndSort(currentFilterCriteria, sortCriteria);
+
+    setCurrentSortCriteria(sortCriteria);
+  }
+
+  function applyFilterAndSort(filterCriteria, sortCriteria) {
+    let processedData = [...data];
+
+    if (filterCriteria) {
+      const {
+        startYear,
+        endYear,
+        revenueStart,
+        revenueEnd,
+        incomeStart,
+        incomeEnd,
+      } = filterCriteria;
+
+      processedData = processedData.filter((d) => {
+        const year = Number(d.date.slice(0, 4));
+        const dateMatch = year >= startYear && year <= endYear;
+
+        const revenueMatch =
+          revenueStart === 0 && revenueEnd === Infinity
+            ? true
+            : d.revenue >= revenueStart && d.revenue <= revenueEnd;
+
+        const incomeMatch =
+          incomeStart === 0 && incomeEnd === Infinity
+            ? true
+            : d.netIncome >= incomeStart && d.netIncome <= incomeEnd;
+
+        return dateMatch && revenueMatch && incomeMatch;
+      });
     }
 
-    if (sortBy === "revenue") {
-      if (order === "ascending") {
-        const sorted = [...dataToSort].sort((a, b) => a.revenue - b.revenue);
-        console.log(sorted);
-        setSortBy(sorted);
-        setIsSorted(true);
-      } else {
-        const sorted = [...dataToSort].sort((a, b) => b.revenue - a.revenue);
-        console.log(sorted);
-        setSortBy(sorted);
-        setIsSorted(true);
-      }
+    if (sortCriteria) {
+      const { sortBy, order } = sortCriteria;
+      processedData = [...processedData].sort((a, b) => {
+        if (sortBy === "dateRange") {
+          return order === "ascending"
+            ? new Date(a.date) - new Date(b.date)
+            : new Date(b.date) - new Date(a.date);
+        } else if (sortBy === "revenue") {
+          return order === "ascending"
+            ? a.revenue - b.revenue
+            : b.revenue - a.revenue;
+        } else if (sortBy === "netIncome") {
+          return order === "ascending"
+            ? a.netIncome - b.netIncome
+            : b.netIncome - a.netIncome;
+        }
+      });
     }
 
-    if (sortBy === "netIncome") {
-      if (order === "ascending") {
-        const sorted = [...dataToSort].sort(
-          (a, b) => a.netIncome - b.netIncome
-        );
-        console.log(sorted);
-        setSortBy(sorted);
-        setIsSorted(true);
-      } else {
-        const sorted = [...dataToSort].sort(
-          (a, b) => b.netIncome - a.netIncome
-        );
-        console.log(sorted);
-        setSortBy(sorted);
-        setIsSorted(true);
-      }
-    }
+    console.log(processedData);
+    setFilterAndSort(processedData);
+    setIsFilteredOrSorted(true);
   }
   return (
     <>
@@ -138,11 +140,9 @@ function App() {
         data={data}
         getData={onGetData}
         handleFilter={onHandleFilter}
-        filter={filter}
-        isFiltered={isFiltered}
+        filterAndSort={filterAndSort}
         handleSort={onHandleSortBy}
-        sorted={sortBy}
-        isSorted={isSorted}
+        isFilteredOrSorted={isFilteredOrSorted}
       />
     </>
   );
