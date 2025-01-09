@@ -11,3 +11,6 @@ Instructions to run the project locally
 
 4. Run the development server
    npm run dev
+
+Website URL:
+https://financial-data-app-woad.vercel.app/
