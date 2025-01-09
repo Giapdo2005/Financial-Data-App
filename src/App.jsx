@@ -13,7 +13,7 @@ function App() {
   async function onGetData() {
     console.log("Button clicked, fetching data...");
     try {
-      const apiKey = process.env.NEXT_PUBLIC_API_KEY;
+      const apiKey = import.meta.env.VITE_API_KEY;
 
       const response = await fetch(
         `https://financialmodelingprep.com/api/v3/income-statement/AAPL?period=annual&apikey=${apiKey}`
