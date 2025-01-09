@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export function Filter({ handleFilter }) {
+export function Filter({ handleFilter, handleSort }) {
   const [startYear, setStartYear] = useState(2020);
   const [endYear, setEndYear] = useState(2024);
   const [endYearOptions, setEndYearOptions] = useState([]);
@@ -19,10 +19,7 @@ export function Filter({ handleFilter }) {
     <>
       <form onSubmit={handleFilter} className="space-y-6">
         <div className="flex flex-col space-y-2">
-          <label htmlFor="dateRange" className="font-semibold text-lg">
-            Date Range
-          </label>
-          <div className="flex space-x-4">
+          <div className="flex space-x-4 mt-4">
             <div className="flex flex-col">
               <label className="font-semibold text-lg">Start Year</label>
               <select
@@ -108,7 +105,7 @@ export function Filter({ handleFilter }) {
         </button>
       </form>
 
-      <div className="flex items-center space-x-4">
+      <form className="flex items-center space-x-4" onSubmit={handleSort}>
         <div className="flex flex-col">
           <label htmlFor="sortBy" className="font-semibold">
             Sort By
@@ -117,9 +114,9 @@ export function Filter({ handleFilter }) {
             id="sortBy"
             className="p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <option>Date Range</option>
-            <option>Revenue</option>
-            <option>Net Income</option>
+            <option value="dateRange">Date Range</option>
+            <option value="revenue">Revenue</option>
+            <option value="netIncome">Net Income</option>
           </select>
         </div>
         <div className="flex flex-col">
@@ -127,17 +124,17 @@ export function Filter({ handleFilter }) {
             Order
           </label>
           <select
-            id="sortBy"
+            id="order"
             className="p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <option>Ascending</option>
-            <option>Descending</option>
+            <option value="ascending">Ascending</option>
+            <option value="descending">Descending</option>
           </select>
         </div>
         <button className="flex items-center bg-gray-800 text-white text-xl mt-5 font-bold px-6 py-2 rounded hover:bg-gray-600">
           Sort
         </button>
-      </div>
+      </form>
     </>
   );
 }

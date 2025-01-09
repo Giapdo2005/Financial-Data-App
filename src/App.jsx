@@ -7,6 +7,8 @@ function App() {
   const [data, setData] = useState([]);
   const [filter, setFilter] = useState([]);
   const [isFiltered, setIsFiltered] = useState(false);
+  const [sortBy, setSortBy] = useState([]);
+  const [isSorted, setIsSorted] = useState(false);
 
   async function onGetData() {
     console.log("Button clicked, fetching data...");
@@ -19,7 +21,6 @@ function App() {
       const data = await response.json();
 
       setData(data);
-      setClick(true);
     } catch (error) {
       console.error(error.message);
     }
@@ -72,6 +73,64 @@ function App() {
     setFilter(filterData);
   }
 
+  function onHandleSortBy(e) {
+    e.preventDefault();
+    console.log("clicked");
+
+    const form = e.target;
+    const sortBy = form.sortBy.value;
+    const order = form.order.value;
+
+    const dataToSort = isFiltered ? filter : data;
+
+    if (sortBy === "dateRange") {
+      if (order === "ascending") {
+        const sorted = [...dataToSort].sort(
+          (a, b) => new Date(a.date) - new Date(b.date)
+        );
+        setSortBy(sorted);
+        setIsSorted(true);
+      } else {
+        const sorted = [...dataToSort].sort(
+          (a, b) => new Date(b.date) - new Date(a.date)
+        );
+        setSortBy(sorted);
+        setIsSorted(true);
+      }
+    }
+
+    if (sortBy === "revenue") {
+      if (order === "ascending") {
+        const sorted = [...dataToSort].sort((a, b) => a.revenue - b.revenue);
+        console.log(sorted);
+        setSortBy(sorted);
+        setIsSorted(true);
+      } else {
+        const sorted = [...dataToSort].sort((a, b) => b.revenue - a.revenue);
+        console.log(sorted);
+        setSortBy(sorted);
+        setIsSorted(true);
+      }
+    }
+
+    if (sortBy === "netIncome") {
+      if (order === "ascending") {
+        const sorted = [...dataToSort].sort(
+          (a, b) => a.netIncome - b.netIncome
+        );
+        console.log(sorted);
+        setSortBy(sorted);
+        setIsSorted(true);
+      } else {
+        const sorted = [...dataToSort].sort(
+          (a, b) => b.netIncome - a.netIncome
+        );
+        console.log(sorted);
+        setSortBy(sorted);
+        setIsSorted(true);
+      }
+    }
+  }
   return (
     <>
       <Navbar />
@@ -81,6 +140,9 @@ function App() {
         handleFilter={onHandleFilter}
         filter={filter}
         isFiltered={isFiltered}
+        handleSort={onHandleSortBy}
+        sorted={sortBy}
+        isSorted={isSorted}
       />
     </>
   );
