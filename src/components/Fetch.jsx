@@ -12,17 +12,19 @@ export function Fetch({
   isSorted,
 }) {
   return (
-    <div className="flex justify-center mt-10">
-      <div>
+    <div className="flex justify-center mt-6 px-4 sm:mt-10">
+      <div className="w-full max-w-3xl">
         <button
-          className="flex items-center bg-gray-800 text-white text-xl font-bold px-6 py-4 rounded hover:bg-gray-600"
+          className="w-full sm:w-auto flex items-center justify-center bg-gray-800 text-white text-lg font-bold px-4 py-3 sm:px-6 sm:py-4 rounded hover:bg-gray-600 mb-6"
           onClick={getData}
         >
           Get AAPL Apple Data
         </button>
-        <div>
+        <div className="overflow-x-auto sm:overflow-x-visible">
           {data.length > 0 && (
-            <Filter handleFilter={handleFilter} handleSort={handleSort} />
+            <div>
+              <Filter handleFilter={handleFilter} handleSort={handleSort} />
+            </div>
           )}
           {data.length > 0 && !isFiltered && !isSorted && <Table data={data} />}
           {isFiltered && filter.length > 0 && !isSorted && (
