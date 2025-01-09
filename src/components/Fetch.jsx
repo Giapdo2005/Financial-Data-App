@@ -25,7 +25,9 @@ export function Fetch({
             <Filter handleFilter={handleFilter} handleSort={handleSort} />
           )}
           {data.length > 0 && !isFiltered && !isSorted && <Table data={data} />}
-          {isFiltered && filter.length > 0 && <Table data={filter} />}
+          {isFiltered && filter.length > 0 && !isSorted && (
+            <Table data={filter} />
+          )}
           {isFiltered && filter.length === 0 && (
             <p className="text-gray-600 text-center">No matching result</p>
           )}
